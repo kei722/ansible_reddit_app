@@ -1,0 +1,43 @@
+---
+# tasks file for ui_comment
+- name: install bundler
+  apt:
+    name: bundler
+    state: present
+    update_cache: true
+
+- name: install dependencies
+  bundler:
+    state: present
+    gemfile: /opt/reddit/{{ item }}/Gemfile
+  loop: 
+    - ui
+    - comment
+
+- name: add config
+  template:
+    src: ui_config.j2
+    dest: /opt/reddit/{{ item }}/{{ item }}_config
+  notify: reload reddit-ui_and_comment
+  loop:
+    - ui
+    - comment
+
+- name: add reddit-ui and reddit-comment services
+  template:
+    src: reddit-{{ item }}.service.j2
+    dest: /etc/systemd/system/reddit-{{ item }}.service
+  notify: reload reddit-ui_and_comment
+  loop:
+    - ui
+    - comment
+
+- name: enable and start reddit-ui and reddit-comment services
+  systemd:
+    state: started
+    name: reddit-{{ item }}
+    enabled: true
+    daemon_reload: true
+  loop:
+    - ui
+    - comment

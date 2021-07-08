@@ -9,7 +9,6 @@
         version: microservices_for_mc
         force: true
   roles:
-    - ui
-    - comment
+    - ui_comment
     - post
     - db

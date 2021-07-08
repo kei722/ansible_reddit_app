@@ -1,0 +1,10 @@
+---
+# handlers file for comment
+- name: reload reddit-ui_and_comment
+  systemd:
+    name: reddit-{{ item }}
+    state: restarted
+    daemon_reload: true
+  loop:
+    - ui
+    - comment
