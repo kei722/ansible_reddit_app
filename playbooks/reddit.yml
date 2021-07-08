@@ -10,3 +10,6 @@
         force: true
   roles:
     - ui
+    - comment
+    - post
+    - db
